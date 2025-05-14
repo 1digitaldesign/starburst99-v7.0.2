@@ -1,0 +1,148 @@
+-----------------------------------------------------------------
+ReadMe file : Description  of the lcb97 theoretical library of
+stellar flux distributions and synthetic colors
+-----------------------------------------------------------------
+(Lejeune, T., Cuisinier, F., Buser, R., 1997, A&AS 125, 229)
+
+1) Description of the library
+ ----------------------------
+
+By combining different  grids of blanketed stellar  atmosphere spectra
+(Bessel et al 1991, Fluks et al 1992, Kurucz 1995, Allard & Hauschildt
+1995,  see  below)  the  present library   provides  an extensive  and
+homogenous grid  of low-resolution theoretical flux  distributions and
+synthetic UBVRIJHKLM colors for a  large range of stellar parameters :
+TEFF = 50,000 K  to 2000 K,  LOGG = 5.50 to -1.02  and [M/H] = -5.0 to
++1.0.
+
+
+Composition of the hybrid library in the stellar parameter space is as
+follows :
+
+
+  TEFF(K)       LOGG         [M/H]      LAMBDA(nm)   Source
+-------------------------------------------------------------
+3500~50,000   0.00~5.00    -5.0~+1.0    9.1~160000   K95
+-------------------------------------------------------------
+2000~3200     3.50~5.50    -3.5~+0.5    100~5100     AH95
+        				   >5100     bb
+-------------------------------------------------------------
+2500~3350    -1.02~0.87    -1.0~+0.5     99~600      FPTWWS94
+    					600~4070     BBSW91
+       					   >4070     bb
+-------------------------------------------------------------
+
+Source references:
+
+K95 : Kurucz 1995
+AH95: Allard & Hauschildt 1995
+FPTWWS94 : Fluks et al. 1994
+BBSW91 : Bessell et al. 1991
+bb : Black Body
+
+A correction procedure  has  been applied  to the theoretical   energy
+distributions    in order  to  calibrate    the  fluxes  on  empirical
+color-temperature relations   as described in the  accompanying paper,
+Lejeune et al., 1997a, A&AS 125, 229 (see  also Lejeune et al., 1997b,
+to  appear in A&AS [astro-ph/9710350]).  
+
+The library is given here in its two versions : 
+
+a) The first one providing  "original" flux distributions (as given in
+the  original grids  of model  atmosphere),  but rebinned  on a common
+wavelength scale (see also Leitherer et al. 1996)
+
+b) The second one providing the "corrected" flux distributions.
+
+
+2) Contents
+-----------
+
+Each version of the library contains an ASCII  file of models for each
+of the 19  values of the metallicity  ([M/H] = -5.0, -4.5, -4.0, -3.5,
+-3.0, -2.5, -2.0, -1.5, -1.0, -0.5, -0.3, -0.2, -0.1, 0.0, +0.1, +0.2,
++0.3, +0.5 and +1.0), designated by
+
+     lcb97_xxx.yyy
+
+where xxx designates the  metallicity (ex: 'm15' --> [M/H]=-1.5),  and
+yyy is an identifier which refers to the library version : 
+
+	yyy = "ori" --> original  SEDs, 
+	yyy = "cor" --> corrected SEDs.
+
+For each model (out of the  total of 8315  models), a flux spectrum is
+given for the (same) set of 1221  wavelenght points covering the range
+9.1 to 160000 nm, with a mean resolution of 10 A in the UV and 20 A in
+the visible.
+
+3) Flux distributions
+---------------------
+
+For each file (of given metallicity):
+- Lines 1 to 153, the set of 1221 wavelenghts (in nm) [format(8f10.1)];
+- Lines 154 to the end, ~450 successive blocks of model fluxes
+  Each block contains in the first line an identifier (model number, 
+  TEFF, LOGG, [Fe/H]) and the 1221 values of the blanketed emergent
+  surface flux, expressed as flux moment, H_NU (in  erg/cm2/s/Hz/sr)
+  [format(7e11.4)]
+
+Note about  the units that H_NU  is expressed as   flux moment, and is
+given in the units ergs/s/cm/cm/Hz (SI: mW/m/m/Hz). Hence F_LAMBDA, in
+units  ergs/s/cm/cm/Angstrom, must be   calculated from H_NU using the
+equation
+
+        F_LAMBDA=0.4*H_NU*c/LAMBDA/LAMBDA,                (1)
+
+    where
+
+        c=2.997925e17.......is the velocity of light
+
+    and
+
+        LAMBDA........is the wavelength in nanometers
+                            (as tabulated at the beginning of each
+                            file lcb97_xxx.yyy)
+
+The numerical factor of 0.4 (=4*0.1) in  equation (1) above comes from
+the   conversion  of the  flux   moment into flux   (*4)  and from the
+conversion of flux per nanometer into flux per Angstrom (*0.1).
+
+NOTICE however  that F_LAMBDA  still  is  a surface  flux;  therefore,
+calculations  of absolute luminosities for  the present models require
+additional assumptions about the radii of the stars represented by the
+models.
+
+Within each file, the individual models are listed with TEFF increasing, 
+and LOGG increasing at a given TEFF.
+
+4) Synthetic colors
+-------------------
+
+Synthetic UBV(RI)cJHKLM colors  and  bolometric corrections  BC_V have
+been computed from both the "original" and the "corrected" theoretical
+flux distributions.  They are given in the files
+
+ lcb97_xxx.yyy.UBVRIJHKLM.
+
+The zero-points  were defined  from the Vega  model spectra  of Kurucz
+(1991).  For the bolometric corrections, we followed the zero-pointing
+procedure described in  the second paper (Lejeune et  al.  1997b).  We
+first  (arbitrarily) set the   smallest bolometric correction for  the
+TEFF = 7000 K, LOGG  =  1.0) model to   zero.  The zero-point is  then
+defined, in order  to   provide  the  best  fit  of  well  established
+empirical  bolometric-correction scales (Flower 1996).  Adopting these
+definitions and the standard value of the solar radius (Allen 1973) we
+find L =  3.845 10^33 erg/s, M_V =  4.854 and BC_V   = -0.108 for  the
+solar model (TEFF = 5777, LOGG = 4.44).
+
+
+
+----------------------------------------------------------------------
+PS: Also included  in  the library  are  this ReadMe  file  and a
+FORTRAN program (read_lcb97.f) for reading the model spectra.
+
+
+(end)
+==============================================================================
+   [Thibault Lejeune, Astron. Institute, Univ. of Basel, 20 Oct 1997]

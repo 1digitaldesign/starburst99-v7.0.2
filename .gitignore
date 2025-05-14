@@ -1,0 +1,27 @@
+# Compiled objects and modules
+*.o
+*.mod
+*.smod
+galaxy
+galaxy_fixed
+
+# Temporary files
+fort.*
+*.tmp
+
+# macOS-specific
+.DS_Store
+
+# Editor files
+*~
+*.swp
+
+# Build files
+/bin/
+
+# Output files that don't need tracking
+/output/time_used
+
+# Large data files
+data/lejeune/allstars*.txt
+json_data/allstars*.json
