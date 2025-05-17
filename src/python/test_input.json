@@ -1,0 +1,24 @@
+{
+  "name": "Test Model Python JSON",
+  "star_formation": {
+    "mode": 1,
+    "total_mass": 1.0,
+    "rate": 1.0
+  },
+  "imf": {
+    "num_intervals": 1,
+    "exponents": [2.35],
+    "mass_limits": [1.0, 100.0],
+    "sn_cutoff": 8.0,
+    "bh_cutoff": 120.0
+  },
+  "model": {
+    "metallicity_id": 24,
+    "wind_id": 0
+  },
+  "time": {
+    "steps": 1001,
+    "min": 1.0,
+    "max": 10.0
+  }
+}

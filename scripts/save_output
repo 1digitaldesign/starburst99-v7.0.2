@@ -1,0 +1,65 @@
+#!/bin/bash
+#==============================================================================
+# Galaxy/Starburst99 Output Saving Script
+#==============================================================================
+# This script renames and organizes the output files from Galaxy/Starburst99
+#
+# Usage: ./save_output prefix extension
+#   - prefix: Base name for the output files (e.g., "standard")
+#   - extension: Numerical extension (e.g., "1")
+#
+# The script will rename all fort.XX files to prefix.typeXX
+#==============================================================================
+
+# Check for required arguments
+if [ $# -lt 2 ]; then
+  echo "Usage: ./save_output prefix extension"
+  echo "Example: ./save_output standard 1"
+  exit 1
+fi
+
+PREFIX=$1
+EXT=$2
+
+echo "Saving synthesis files to $PREFIX.*$EXT"
+
+# Handle files in a consistent way
+save_file() {
+  local fort_num=$1
+  local file_name=$2
+  
+  if [ -e "fort.$fort_num" ]; then
+    echo "- Saving fort.$fort_num as $PREFIX.$file_name$EXT"
+    # Copy the input file (don't move it), move all others
+    if [ "$fort_num" -eq 1 ]; then
+      /bin/cp "fort.$fort_num" "$PREFIX.$file_name$EXT"
+    else
+      /bin/mv "fort.$fort_num" "$PREFIX.$file_name$EXT"
+    fi
+  else
+    echo "- Note: fort.$fort_num not found (no $file_name output)"
+  fi
+}
+
+# Save all output files
+save_file 1 "input"
+save_file 99 "output"
+save_file 98 "quanta"
+save_file 97 "snr"
+save_file 96 "hrd"
+save_file 95 "power"
+save_file 94 "sptyp1"
+save_file 90 "sptyp2"
+save_file 93 "yield"
+save_file 92 "spectrum"
+save_file 91 "uvline"
+save_file 89 "color"
+save_file 88 "ewidth"
+save_file 87 "irfeature"
+save_file 86 "ovi"
+save_file 84 "wrlines"
+save_file 83 "ifaspec"
+save_file 82 "hires"
+
+echo "Save complete. Results are in prefix: $PREFIX with extension: $EXT"
+

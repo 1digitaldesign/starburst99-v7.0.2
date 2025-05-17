@@ -1,0 +1,23 @@
+test_z3     Model designation
+-1     Star formation mode: >0 continuous, -1 instantaneous
+1.0     Total stellar mass (10^6 Msun)
+1.0     Star formation rate (Msun/yr)
+1     Number of intervals for the IMF
+2.35     Exponent for the IMF
+0.1 100.     Mass boundaries for the IMF (Msun)
+8.0     SNII cutoff mass (Msun)
+120.0     Black hole cutoff mass (Msun)
+3     Metallicity + tracks identifier
+0     Wind model
+0.0    Initial time (10^6 yr)
+0     Time scale: 0=linear, 1=logarithmic
+1.0     Time step (10^6 yr) if jtime=0
+10     Number of steps if jtime=1
+100.0     Last grid point (10^6 yr)
+0     Atmosphere model
+0     Metalicity of high-resolution models
+1     UV line spectrum (1=solar, 2=LMC/SMC)
+0 0     RSG parameters for individual features
+1 1 1 1 1     Output files 1-5
+1 1 1 1 1     Output files 6-10
+1 1 1 1 1     Output files 11-15

@@ -1,0 +1,727 @@
+                      README File for the Code Galaxy
+                 ===========================================
+
+                        First version: 12 Aug 1998 (CL)
+
+Claus Leitherer, Carmelle Robert, Daniel Schaerer, Jeff Goldader, Rosa
+Gonzalez-Delgado, & Duilia de Mello
+
+                      Last update: 25 August 2014 (CL)
+
+Claus Leitherer
+
+Disclaimer: This code is distributed freely to the community. The user
+acceptssole responsibility for the results produced by the code. Although
+every effort has been made to identify and eliminate errors, we accept no
+responsibility for erroneous model predictions.
+
+The Starburst99 code and the models should be quoted as Leitherer et al. (1999,
+ApJS, 123, 3), Vazquez & Leitherer (2005; ApJ, 621, 695), and Leitherer et al.
+(2014; ApJS, in press)
+
+
+1. A bit of history
+
+As so often, this code started out as a small project in 1987.
+Back then, ClausLeitherer wanted to have a little computer program to calculate
+ionizing fluxesfor individual O stars. The program evolved from handling a single
+star toa whole population. At the same time, there was the desire to assign
+positions in the HRD for comparison with observations. Results from this rather
+simple code were reported in ApJS, 73, 1 (1990). By 1990 the program had grown to
+compute the output of the mechanical luminosity of winds and of supernovae.
+A paper on that is in ApJ, 401, 498 (1992). The "real" spectral synthesis
+capability was implemented in 1991, when we added Kurucz and Schmutz model
+atmospheres from the far-UV to the near-IR. This allowed us to calculate spectra
+and colors for young populations. Carmelle Robert included an IUE
+spectral library in the code in order to compute synthetic lines at 0.75 A
+resolution (ApJ, 418, 749 [1993], ApJS, 99, 173 [1995]). By 1994, we had
+computed so many models, synthesizing all kinds of galaxy parameters that the
+suggestion was made to combine everything, plot it in a homogeneous way, and
+publish it (ApJS, 96, 9 [1995]). Who would have predicted that quite a few
+astronomers found this useful? Later we began to add a few more specialized
+routines, like the computation of O VI line profiles by Rosa Gonzalez-Delgado
+(ApJ, 489, 601 [1997]). The mostrecent subroutine was written by Jeff Goldader.
+This part calculates the strengths of selected stellar features in the near-IR.
+After having served us so well over 10 years, it become clear that the code
+needed a major upgrade. Daniel Schaerer replaced the ancient Maeder (1990)
+tracks by the most recent (1992-94) model series of Geneva. He also implemented
+the capability to perform isochrone synthesis in addition to classical evolutionary
+synthesis. One of the subroutines used for this was written by Georges Meynet.
+We also decided to take advantage of the homogeneous atmosphere grid compiled by
+Lejeune et al. (1997) and replaced the original Kurucz models by the new set.
+The updated code was made available to the community viaa spiffy website
+called Starburst99 (Leitherer et al. 1999, ApJ, 123, 3).
+
+Since then, quite a few important improvements were made. First, Duilia de Mello
+added a high-resolution spectral library of B stars in fall 1999. A description
+is in ApJ, 530, 251 (2000). This library replaced the low-resolution B-star
+library we used before. (O stars have always been from a high-dispersion
+library.) Alessandra Aloisi added supernova yields to the code. Before that,
+only yields from stellar winds were taken into account, and the supernova
+yields of those elements which undergo no nuclear processing during a
+supernova explosion. Now the models are up-to-date with respect to the
+nucleosynthesis in type II supernovae (and only those -- we don't do type I's
+yet). This changewas made in August 2000. Claus Leitherer and summer student
+Joao Leao Souza added a spectrallibrary of LMC and SMC stars in August 2000
+(Leitherer et al. 2001, ApJ, 550,724). This allows calculations of models for
+UV spectra with sub-solar metallicities. Only O-stars are used for SMC/LMC
+metallicity, everything else is solar. This is not perfect -- but it is a
+starting point. Miguel Cervino, in collaboration with Daniel Schaerer greatly
+improved several numerical aspects of the code. In particular he wrote new code
+to handle the calculation of the supernova rate in isochrone synthesis.
+Previously, all SN related parameters showed rather ugly discontinuities due
+to numerical instabilities (see Leitherer et al. 1999). This was fixed in
+October 2000. Anne Pellerin and Claus Leitherer added a high-resolution spectral
+library of hot stars observed with FUSE. The library stars are in the Galaxy,
+the LMC,and the SMC. The spectral range is from 1000 to 1183 A, and the structure
+corresponds to that of the IUE/HST stars used at longer wavelengths. The library
+is discussed in Robert et al. (2003).
+
+A major limitation of the original Starburst99 models was removed by Richard
+Norris, Linda Smith, and Paul Crowther. They replaced the unblanketed WR
+atmospheres of Schmutz et al. (1992) by a fully blanketed set calculated with
+John Hillier's code. The updated Starburst99 code, released as v4.0 in July
+2002, gives more realistic EUV fluxes during WR dominated phases.
+
+Starburst99 v5.0 in December 2004 was the most significant upgrade since the
+original Starburst99 code was released. Gerardo Vazquez worked hard to add the
+Padova tracks including thermally pulsing AGB stars to Starburst99. We always
+considered our primary application domain young, OB-star dominated starbursts.
+Most astronomers prefer modeling such phases with the evolutionary tracks from
+the Geneva group. Nevertheless, young and old stars often come together, and
+the Geneva models are not optimized for reproducing low-mass stars. Therefore
+we opted for adding the Padova models as well (Vazquez & Leitherer 2005). A
+second major addition was the implementation of a high-resolution optical
+library by Lucimara Martins. This library has a resolution of 0.3 A and
+complements the previous low-resolution library when line profile studies are
+desired (Martins et al. (2005).
+
+On August 25, 2010 we released Starburst99 v6.0. This version includes a new
+subroutine to calculate fully theoretical UV spectra using a library generated
+with the WM-Basic code (Leitherer et al. 2010). These models complement and
+extend the existing library of empirical spectra. Additional changes in this
+version include: replacement of the old Schmidt-Kaler spectral-type calibration
+of OB stars by the more modern work of Martins et al. (2005); update of the
+subroutine nucleo to account for the SN yields of very massive stars (>40)
+in an approximate way. Finally, the code was restructured quite a bit and
+many questionable fortran issues were fixed.
+
+Version 7.0.0 of Starburst99 was released in March 2014. This version was
+developed in close collaboration with the Geneva stellar evolution group and
+offers a set of tracks with rotation. The models are discussed in Levesque
+et al. (2012) and Leitherer et al. (2014). Other major new features of the
+package are the inclusion of the Potsdam Wolf-Rayet library for the computation
+of the theoretical UV line spectra, and a subroutine to calculate the stellar
+Lyman-alpha line (Pena-Guerrero & Leitherer 2013).
+
+
+More to come in the future --- stay tuned!
+
+
+2. File structure
+
+The package comes with quite a few files. Some are essential whereas others
+are not, and one can do without them.
+
+2.1   The README file -- you should read this first.
+
+2.2   galaxy.f -- this is the code. It is standard Fortran 77. Nothing fancy,
+      and some software wizards may consider the coding pretty pedestrian.
+      Keep in mind the code was written for ourselves and not as shareware for
+      the community. The main goal was to make it easily understandable and
+      to make the structure be driven by astrophysical requirements. Elegance
+      and speed were not our prime concern.
+
+2.3   Makefile -- this file is used to compile the code. You may want to
+      tailor this to your needs.
+
+2.4   go_galaxy -- this is a script to run the code. Its most important purpose
+      is to assign the directories where the auxiliary files reside. You may
+      also want to modify this depending on your directory structure.
+
+2.5   save_output --  this is a script to save the output files and give them
+      reasonable names. (The input file with the model parameters is also
+      included here.) To get started, we suggest to keep the names as they
+      are in this file.
+
+2.6   mod****.dat -- 20 files containing the evolutionary models. There are
+      4 groups of 5 files. 1) "c" - Geneva tracks with standard mass-loss
+      rates and chemical composition of 2x solar (040), solar (020), 0.4x solar
+      (008), 0.2x solar (004), and 0.05x solar (001); 2) "e" - same as "c" but
+      with high mass-loss rates; 3) "s" - Padova tracks as updated by Girardi
+      (2000) for chemical composition 0.050, 0.020, 0.008, 0.004, and 0.0004;
+      4) "p" - same as "s" but with the inclusion of thermally pulsing AGB stars
+      following the prescription of Vassiliadis & Wood (1993).
+
+2.7   Zxxxxvyy.txt -- 4 files containing the rotating evolutionary tracks. xxxx
+      stands for 0140 (solar composition) and 0020 (1/7th solar). yy is either 00
+      or 40 for the non-rating and rotating tracks of Ekstrom et al. (2012) and
+      Georgy et al. (2013).
+
+2.8   lcb97_***.flu -- 5 files containing the model atmospheres of Lejeune et
+      al. They match the metallicities of the evolutionary tracks. Note that
+      some models were interpolated from the original Lejeune set since
+      the required metallicities were not available.
+
+2.9   wr_beta*.fluxes -- 2 files with the WR model atmospheres of Schmutz et
+      al. (1992).
+
+2.10  CMFGEN*.dat -- 10 files containing the WR models computed by the UCL
+      group (5 metallicities, 2 WR types).
+
+2.11  WMbasic*.dat -- 5 files with the Pauldrach O-star atmospheres for 5
+      metallicities.
+
+2.12  allstars*.txt -- 9 files in support of the optical high-resulution
+      spectra. The files contain the line spectra ("flux"), theoretical
+      continua ("cont"), and the wavelength grid ("wave") for the theoretical
+      library of Martins et al. (2005). p03, p00, m05, and m10 indicate
+      metallicities of twice solar, solar, 40% solar, and 10% solar.
+
+2.13  ifa_*.txt -- 11 files in support of the theoretical UV spectra. The files
+      contain the line spectra ("flux"), continua ("cont"), and the
+      wavelength grid ("wave") for the library of Leitherer et al. (2010).
+      p03, p00, m04, m07, and m13 indicate the metallicities of twice solar,
+      solar, 40% solar, 20% solar, and 5% solar.
+
+2.14  PoWR-W*-Z****.txt -- 10 files with the Potsdam Wolf-Rayet UV spectra.
+      They are divided into WC and WN stars. Currently all spectra are for
+      solar metallicity.
+
+2.15  sp.dat -- IUE spectral library of O, B, and WR stars used in the
+      subroutine linesyn. This library is also available (in a more readable
+      form) via the CD accompanying the article in PASP, 108, 996 (1996), or
+      from our web page.
+
+2.16  sp_low.dat -- FOS and STIS spectral library of LMC/SMC O stars used in
+      the subroutine linesyn. The structure is identical to that of sp.dat.
+      All stars other than O stars are the same as in sp.dat. (Leitherer et
+      al. 2001; ApJ, 550, 724.)
+
+2.17  fuse_high.dat -- FUSE spectral library of Galactic O and early B stars
+      used in the subroutine fusesyn. The structure is identical to that of
+      sp.dat. All stars other than O and early B have their continua set to 1.
+
+2.18  fuse_low.dat -- same as fuse_high.dat but for LMC and SMC stars.
+      Molecular hydrogen lines were removed. The reference for both FUSE
+      libraries is Robert et al. (2002).
+
+2.19  schkal.dat -- spectral-type calibration of Schmidt-Kaler (1982) and
+      Martins et al. (2005). The table simply contains a list of log L
+      (in solar luminosities) and log Teff (in K). Each line corresponds
+      to a certain spectral type.
+
+2.20  irfeatures.dat -- contains data for the near-IR CO features at 1.62 and
+      2.29 microns, and the silicon feature at 1.59 microns from Origlia,
+      Moorwood, and Oliva (1993) A&A, 280, 536.
+
+2.21  lymanalpha.txt -- contains the Lyman-alpha equivalent widths versus Teff
+      and log g. See Pena-Guerrro & Leitherer (2013).
+
+2.22  standard.input1 -- this is the input file specifying the model
+      parameters. It is explained in more detail below.
+
+2.23  standard.* -- results of a standard model run. These files are obtained
+      by using the parameters in the galaxy.input file. They can be used for
+      test runs when implementing the code.
+
+
+
+3. How to run the code
+
+Get organized first. Create a directory for the code and the unix scripts
+(files 2.1 -- 2.5). Create separate directories for the evolutionary tracks
+(2.6, 2.7), for the spectral libraries (2.8 -- 2.14), and for the auxiliary files
+(2.15 -- 2.21). A directory for the input (2.22) and for the output (2.23)
+should also be created. The directory structure should correspond to what you
+have declared in 2.4 and 2.5. The output directory will be populated by files
+produced during a successful run. The source code should be pretty much machine
+independent, except for the names of the auxiliary files which are called in the
+code. If you extract the code and all the files from the gzipped tar file, you
+will obtain the same filenames and folder structure as at STScI, and little
+renaming should be required.
+
+
+3.1 The input
+
+Once all the files are in place and the declarations are complete, the input
+parameters need to be specified. If this is your first attempt, we suggest to
+leave the parameters as they are. They produce reasonable results and should give
+you a first impression of what is in store. Once you have gainedmore experience
+and have become more adventurous, you can modify the parametersto suit your needs.
+These are the parameters to play with:
+
+
+MODEL DESIGNATION:                                           [NAME]
+standard  -- any identifier you want to assign to the model. You will find
+             it in the header of each output file.
+
+CONTINUOUS STAR FORMATION (>0) OR FIXED MASS (<=0):          [ISF]
+-1  -- if this is a negative integer, star formation is instantaneous,
+       otherwise it is continuous.
+
+TOTAL STELLAR MASS [10<sup>6</sup> SOLAR MASSES] IF 'FIXED MASS' IS CHOSEN: [TOMA]
+1.   -- this is the total stellar mass (spread out between the upper and lower
+        cut-off mases). It is only used if an instantaneous burst is specified.
+
+SFR [SOLAR MASSES PER YEAR] IF 'CONT. SF' IS CHOSEN:         [SFR]
+1.   -- the star formation rate (only used for a continuous rate). The total
+        accumulated mass is spread out between the upper and lower cut-off
+        masses.
+
+NUMBER OF INTERVALS FOR THE IMF (KROUPA=2):                  [NINTERV]
+2    -- intervals of the multi-power-law IMF. If two intervals are specified,
+        the program expects two IMF exponents and three IMF boundaries in the
+        next two input fields. Up to ten such intervals may be specified.
+
+IMF EXPONENT(S) (KROUPA=1.3,2.3):                            [XPONENT]
+1.3,2.3 -- one or more IMF exponents for a power-law can be specified. The
+           exponents refer to the individual power-law intervals, ordered
+           by increasing mass.
+
+MASS BOUNDARIES FOR IMF (KROUPA=0.1,0.5,100) [SOLAR MASSES]: [XMASLIM]
+0.1,0.5,100. -- the boundaries of the IMF intervals corresponding to the
+                specified exponents.
+
+SUPERNOVA CUT-OFF MASS [SOLAR MASSES]:                       [SNCUT]
+8.0 -- stars with ZAMS masses of 8 M and higher form supernovae. This is the
+       suggested standard value but can be modified if desired.
+
+BLACK HOLE CUT-OFF MASS [SOLAR MASSES]:                      [BHCUT]
+120. -- stars with ZAMS masses of 120 M and lower form supernovae. An
+        alternative scenario would be to let stars above a certain threshold
+        form a black hole. For instance, BHCUT=40. results in SNe only from the
+        mass range 40 to 8 M.
+
+METALLICITY + TRACKS:                                        [IZ]
+GENEVA STD: 11=0.001;  12=0.004; 13=0.008; 14=0.020; 15=0.040
+GENEVA HIGH:21=0.001;  22=0.004; 23=0.008; 24=0.020; 25=0.040
+PADOVA STD: 31=0.0004; 32=0.004; 33=0.008; 34=0.020; 35=0.050
+PADOVA AGB: 41=0.0004; 42=0.004; 43=0.008; 44=0.020; 45=0.050
+GENEVA V00: 51=0.001;  52=0.002; 53=0.008; 54=0.014; 55=0.040
+GENEVA v40: 61=0.001;  62=0.002; 63=0.008; 64=0.014; 65=0.040
+
+54 -- this integer indicates the evolutionary tracks to be used. The
+      choices are 11-15, 21-25, 31-35, 41-45, 51-55, and 61-65 where the
+      numbers indicate the metallicity of the four sets of tracks that
+      are available. Example: "54" selects solar metallicity from the latest
+      Geneva tracks with zero rotation. Note: only 52, 54, 62, 64 for the 2012,
+      2013 tracks are currently available. If a different track is chosen, it
+      will be reset to the closest metallicity.
+
+WIND MODEL (0: EVOLUTION; 1: EMP.; 2: THEOR.; 3: ELSON):        [IWIND]
+0 -- this selects the wind model to be used for the calculation of the
+     wind power. The four models are discussed in ApJ, 401, 596 (1992). "0"
+     is the suggested default parameter.
+
+INITIAL TIME [1.E6 YEARS]:                                   [TIME1]
+0.01 -- the epoch of the onset of the star formation. In almost all cases you
+        want this to be close to 0. It should not be exactly 0 for numerical
+        reasons. 0.01 (i.e. 10e4 yr) is a good number.
+
+TIME SCALE: LINEAR (=0) OR LOGARITHMIC (=1)                  [JTIME]
+0 --  a switch to select linear or logarithmic time intervals.
+
+TIME STEP [1.e6 YEARS] (ONLY USED IF JTIME=0):               [TBIV]
+0.1 --  this is the timestep used for the calculations. It is a very important
+        parameter. On the one hand, the computing time scales with STEP, so
+        you want to avoid too high resolution, but on the other, short
+        evolutionary phases can be missed. 0.1 (i.e. 10e5 yr) is a good
+        value if you use full isochrone synthesis. If full isochrone
+        synthesis is not used, 0.1 or large is suggested only for tests
+        --- be aware that WR or RSG numbers are no longer properly calculated
+        even for a TIME STEP of 0.1 unless full ischrone synthesis is selected!
+
+NUMBER OF STEPS        (ONLY USED IF JTIME=1):               [ITBIV]
+1000 -- if a logarithmic scaling is selected, the time step size varies with
+        time and is no longer specified via the TIME STEP field. In this case,
+        we enter the total number of time steps, which will then be distributed
+        logarithmically between the first and the last time point. As before,
+        users should beware of too small steps during short-lived evolutionary
+        phases.
+
+LAST GRID POINT [1.e6 YEARS]:                                [TMAX]
+100. -- the oldest age of the model.
+
+SMALL (=0) OR LARGE (=1) MASS GRID;
+ISOCHRONE ON  LARGE GRID (=2) OR FULL ISOCHRONE (=3):        [JMG]
+3 -- these are four options for the interpolation in mass. They are explained
+     in the code. Shortly: 0 -- evolutionary synthesis with a mass
+     resolution of 5 M (only recommended for tests); 1 -- same as 0, but with
+     a resolution of 1 M. This method was used in Leitherer & Heckman (1995);
+     2 -- isochrone synthesis with a fixed mass resolution of 1 M;
+     3 -- isochrone synthesis with a variable mass grid. This is the recommended
+     method. In particular, FULL ISOCHRONE must be used if masses below 1 solar
+     masses from the Padova tracks are to be included in the modeling.
+
+LMIN, LMAX (ALL=0):                                          [LMIN,LMAX]
+0 -- LMIN and LMAX are the indices of the evolutionary tracks, sorted by mass.
+     Normally you do not want to mess with the variable and leave it at 0.
+     However, if you want to track down some peculiarity of the output, you
+     may want to compute the parameters for only one track. For instance,
+     specifying 21,21 indicates that only a 100 M star should be used, and
+     everything else is suppressed. The cross-ID's between index and mass
+     are at the bottom of the input file. The example here refers to JMG=1 or
+     2. For JMG=0, you would have chosen 5,5. This does not apply to JMG=3
+     since the mass grid is variable. If JMG=3, LMIN and LMAX are not used.
+
+TIME STEP FOR PRINTING OUT THE SYNTHETIC SPECTRA [1.e6YR]:   [TDEL]
+1.0 -- the file containing the output spectrum can be pretty big. This
+       parameter controls the time step to print out the spectrum. This is
+       independent of the time resolution -- only the print out is affected!
+       1 Myr is usually a good value but if you compute the starburst up to
+       100 Myr, you may prefer TDEL=5 Myr unless you have many GB of disk
+       space.
+
+ATMOSPHERE FOR THE LOW-RES SPECTRUM: 1=PLA, 2=LEJ, 3=LEJ+SCH, 4=LEJ+HIL, 5=PAU+HIL [IATMOS]
+5 -- this is the choice of the model atmosphere. 1 is a bare-bone version with
+     black bodies, good only for tests. 2 uses the Kurucz models as compiled
+     by Lejeune for all stars. 3 uses Lejeune for stars with plane-parallel
+     atmospheres and Schmutz for stars with strong winds. 4 uses Lejeune,
+     but replaces the Schmutz by the Hillier atmospheres. 5 is like 4, except
+     for the O atmospheres, for which we use the Pauldrach models. 5 is the
+     recommended value.
+
+METALLICITY OF THE OPTICAL HIGH RESOLUTION MODELS                    [ILIB]
+(1=0.001, 2= 0.008, 3=0.020, 4=0.040):
+3 -- a switch to choose the metallicity of the optical high-res spectra. 4
+     choices are offered, and the user can decide how to match them to the
+     evolution models.
+
+LIBRARY FOR THE EMPIRICAL UV LINE SPECTRUM: (1=SOLAR, 2=LMC/SMC)       [ILINE]
+1 -- a switch for the choice of the UV spectral library. This switch applies
+     to both the FUSE and the HST/IUE libraries. It is independent of the
+     metallicity of the tracks/atmospheres. Normally one would use, e.g.,
+     ILINE=1 with IZ=54 and ILINE=2 with IZ=52.
+
+RSG FEATURE: MICROTURB. VEL (1-6), SOL/NON-SOL ABUND (0,1)   [IVT,IRSG]
+3,0 -- atmospheric parameters used for the spectral features in the near-IR.
+       Detailed explanations are in the sp-feature subroutine. Defaults are
+       3,0, i.e. microturbulent velocities of 3 km/sec and solar abundance
+       ratios for alpha-element/Fe.
+
+OUTPUT FILES (NO<0, YES>=0)                                  [IO1,...]
++1,+1,-1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1
+	These are options to generate various outputs. We recommend to use
+        the default setting for the flags, at least until you become more
+        familiar with the code. Some of the subroutines are interrelated. If
+        you choose such a subroutine but not the other, required one, a warning
+        will be issued. The 15 output flags are explained in the next section.
+        They are discussed in the order as they appear above. For instance,
+        "(7)" refers to the 7th of the 15 flags.
+
+
+
+3.2. The output
+
+
+(1)   Computation of the number of ionizing photons. (7) must be set to "yes"
+      since the spectrum below 912 A is needed. Output is the number of
+      ionizing photons in the HI, HeI, and HeII continuum, their fractions
+      relative to the total luminosity, and the total luminosity.
+
+(2)   Calculation of the supernova rate and the mechanical luminosities (winds
+      and supernovae). It requires (4) to obtain the stellar wind
+      luminosities. Otherwise it is independent of other subroutines.
+
+(3)   HRD with a few evolutionary tracks. This is mostly useful for test
+      purposes. This part is independent of all other subroutines and can be
+      turned on/off without doing any harm. The HRD cannot be produced in
+      Isochrone Synthesis mode, therefore it is turned off by default.
+
+(4)   Mechanical luminosity and related quantities due to stellar winds. (No
+      supernovae!) This does not depend on any other subroutine since no
+      information on the energy distribution is needed.
+
+(5)   Two output files containing the stellar spectral types during each
+      time step and the relative numbers of WR stars. The spectral types follow
+      the scheme by Schmidt-Kaler, oversampled by a factor of 2. For instance,
+      there are 18 entries for spectral type B. They are the number of stars
+      for types B0, B0.5, B1,...B9.5 (total of 18). Schmidt-Kaler's table has
+      B0, B1,....B9 (total of 9). The spectral types are printed out only
+      every TDEL. Otherwise it is too bulky.
+
+(6)   The mass in individual elements released via stellar winds and
+      supernovae. No other subroutines are needed. The supernova yields for
+      type II supernovae are taken into account.
+
+(7)   The SED of the stellar population for each time step. The columns
+      are time, wavelength, stellar+nebular, stellar only, and nebular only
+      fluxes. (1) is needed in order to calculate the nebular continuum.
+
+(8)   The ultraviolet line spectrum at 0.75 A resolution from 1200 to 1600 A
+      (LMC/SMC library) or to 1800 A (Milky Way library). The subroutine needs
+      (7) to compute the stellar continuum and (1) for the nebular continuum.
+      If (1) is turned off, the nebular contribution can not be added (it is
+      often small, though). The columns have time, wavelength, absolute
+      luminosity, and rectified (continuum=1) luminosity.
+
+(9)   Calculation of colors and magnitudes. The subroutine needs (7) to
+      compute the stellar continuum and (1) for the nebular continuum. If (1)
+      is turned off, the nebular contribution can not be added and the computed
+      colors are for stars only (this may sometimes be desirable). The filter
+      system is defined in the code.
+
+(10)  Calculation of the strengths of H_alpha, H_beta, Pa_beta, and Br_gamma.
+      For each line we give the continuum luminosity, the line luminosity,
+      and the equivalent width (everything logarithmic). The subroutine needs
+      (7) to compute the stellar continuum and (1) for the number of
+      ionizing photons.
+
+(11)  Calculation of the strengths of various spectral features.
+      First is the CO index as computed by Doyon et al. (1994, ApJ, 421,
+      101).  (Please note that this calculation has no metallicity
+      dependence.  A later version of this routine will compute the CO
+      index using the model atmospheres themselves and give
+      metallicity-dependent results.)  Next are two computations of the
+      CaII IR triplet using the relations of Diaz et al. (1989, MNRAS, 239,
+      325). The relations from Diaz et al. have no temperature dependence;
+      the first calculation has the feature present in stars of all
+      temperatures; the second has the index set to zero strength for stars
+      with T>7200K (spectral type A or earlier).  Next come the 1.62 and
+      2.29 micron CO features, and the 1.59 micron Si feature, which were
+      modeled for individual stars by Origlia et al. (1993, A&A, 280,
+      536.)  The indices can be computed for solar [Si/Fe] and [C/Fe],
+      or a model with enhanced [Si/Fe] and depleted [C/Fe] (as for young
+      systems enriched primarily by Type II SNe), and for stellar
+      atmospheric microturbulent velocities (MTVs) of 1-6 km/s.  (Note
+      that the changes to the abundance ratios and MTVs are
+      self-contained in this routine and have no effect upon the other
+      outputs, e.g., colors, of the code.) The last column of the output
+      file has the stellar Lyman-alpha as described by Pena-Guerrero & Leitherer
+      (2013).
+
+(12)  This output is equivalent to (8), but it computes the spectral region
+      between 1000 and 1180 A.
+
+(13)  Calculates fully theoretical spectra between 3000 and 7000 A at 0.3 A
+      resolution. These spectra are independent of the calculation of the
+      low-resolution spectra in output 7. The file structure is the same as in
+      (8).
+
+(14)  Calculation of the most important WR emission lines. These are only those
+      lines originating in WR winds --- not the nebular lines in the HII
+      region. Quantities given are the line fluxes and the equivalent widths.
+      The subroutine needs (7) to compute the stellar continuum and (1) for
+      the nebular continuum. If (1) is turned off, the nebular contribution
+      cannot be added.
+
+(15)  Calculation of a high-resolution UV line spectrum from model atmospheres,
+      as opposed to using an empirical library. The output format and units
+      are the same as those under (13). The library is discussed by
+      Leitherer et al. (2010).
+
+
+
+4. Need Help?
+
+Feel free to ask us if you run into trouble or have questions. But please
+understand that we have no official help desk, and we try to help you in our
+spare time. There is no guarantee that we can trouble-shoot your problems.
+
+
+---
+
+First version: 12 Aug 1998 (CL)
+Claus Leitherer, Daniel Schaerer, Jeff Goldader, Rosa Gonzalez-Delgado, Carmelle Robert, & Duilia de Mello
+
+
+Last update: 25 August 2014 (CL)
+Claus Leitherer
+Disclaimer: This code is distributed freely to the community. The user accepts sole responsibility for the results produced by the code. Although every effort has been made to identify and eliminate errors, we accept no responsibility for erroneous model predictions.
+
+The Starburst99 code and the models should be quoted as Leitherer et al. (1999, ApJS, 123, 3), Vazquez & Leitherer (2005; ApJ, 621, 695), Leitherer et al. (2010; ApJS, 189, 309), or Leitherer et al. (2014, ApJS, in press).
+
+Download the source code v7.0.1 and the ancillary files. This link has all the files needed to run the UNIX/Solaris version of Starburst99.
+
+File structure
+The package comes with quite a few files. Some are essential whereas others are not, and you can do without them.
+
+The README file -- you should read this first.
+galaxy.f -- this is the code. It is standard Fortran 77. Nothing fancy, and some software wizards may consider the coding pretty pedestrian. Keep in mind the code was written for ourselves and not as shareware for the community. The main goal was to make it easily understandable and to make the structure be driven by astrophysical requirements. Elegance and speed were not our prime concern.
+Makefile -- this file is used to compile the code. You may want to tailor this to your need.
+go_galaxy -- this is a script to run the code. Its most important purpose is to assign the directories where the auxiliary files reside. You may also want to modify this depending on your directory structure.
+save_output -- this is a script to save the output files and give them reasonable names. (The input file with the model parameters is also included here.) To get started, we suggest to keep the names as they are in this file.
+mod****.dat -- 20 files containing the evolutionary models. There are 4 groups of 5 files. 1) "c" - Geneva tracks with standard mass-loss rates and chemical composition of 2x solar (040), solar (020), 0.4x solar (008), 0.2x solar (004), and 0.05x solar (001); 2) "e" - same as "c" but with high mass-loss rates; 3) "s" - Padova tracks as updated by Girardi (2000) for chemical composition 0.050, 0.020, 0.008, 0.004, and 0.0004; 4) "p" - same as "s" but with the inclusion of thermally pulsing AGB stars following the prescription of Vassiliadis & Wood (1993).
+Zxxxxvyy.txt -- 4 files containing the rotating evolutionary tracks. xxxx stands for 0140 (solar composition) and 0020 (1/7th solar). yy is either 0 or 40 for the non-rating and rotating tracks of Ekstrom et al. (2012) and Georgy et al. (2013).
+lcb97_***.flu -- 5 files containing the model atmospheres of Lejeune et al. They match the metallicities of the evolutionary tracks. Note that some models were interpolated from the original Lejeune set since the required metallicities were not available.
+wr_beta*.fluxes -- 2 files with the WR model atmospheres of Schmutz et al. (1992).
+CMFGEN*.dat -- 10 files containing the WR models computed by the UCL group (5 metallicities, 2 WR types).
+WMbasic*.dat -- 5 files with the Pauldrach O-star atmospheres for 5 metallicities.
+allstars*.txt -- 9 files in support of the optical high-resulution spectra. The files contain the line spectra ("flux"), theoretical continua ("cont"), and the wavelength grid ("wave") for the theoretical library of Martins et al. (2005). p03, p00, m05, and m10 indicate metallicities of twice solar, solar, 40% solar, and 10% solar.
+ifa_*.txt -- 11 files in support of the theoretical UV spectra. The files contain the line spectra ("flux"), continua ("cont"), and the wavelength grid ("wave") for the library of Leitherer et al. (2010). p03, p00, m04, m07, and m13 indicate the metallicities of twice solar, solar, 40% solar, 20% solar, and 5% solar.
+PoWR-W*-Z****.txt -- 10 files with the Potsdam Wolf-Rayet UV spectra. They are divided into WC and WN stars. Currently all spectra are for solar metallicity.
+sp.dat -- IUE spectral library of O, B, and WR stars used in the subroutine linesyn. This library is also available (in a more readable form) via the CD accompanying the article in PASP, 108, 996 (1996), or from our web page.
+sp_low.dat -- FOS and STIS spectral library of LMC/SMC O stars used in the subroutine linesyn. The structure is identical to that of sp.dat. All stars other than O stars are the same as in sp.dat (Leitherer et al. 2001; ApJ, 550, 724).
+fuse_high.dat -- FUSE spectral library of Galactic O and early B stars used in the subroutine fusesyn. The structure is identical to that of sp.dat. All stars other than O and early B have their continua set to 1.
+fuse_low.dat -- same as fuse_high.dat but for LMC and SMC stars. Molecular hydrogen lines were removed. The reference for both FUSE libraries is Robert et al. (2003).
+schkal.dat -- spectral-type calibration of Schmidt-Kaler (1982) and Martins et al. (2005). The table simply contains a list of log L (in solar luminosities) and log Teff (in K). Each line corresponds to a certain spectral type.
+irfeatures.dat -- contains data for the near-IR CO features at 1.62 and 2.29 microns, and the silicon feature at 1.59 microns from Origlia, Moorwood, and Oliva (1993; A&A, 280, 536).
+lymanalpha.txt -- contains the Lyman-alpha equivalent widths versus Teff and log g. See Pena-Guerrro & Leitherer (2013).
+standard.input1 -- this is the input file specifying the model parameters. It is explained in more detail below.
+standard.* -- results of a standard model run. These files are obtained by using the parameters in the galaxy.input file. They can be used for test runs when implementing the code.
+
+
+How to run the code
+Get organized first.
+
+Create a directory for the code and the unix scripts (files 1 -- 5).
+Create separate directories for the evolutionary tracks(6, 7), for the model atmospheres (8 -- 14), and for the auxiliary files (15 -- 21).
+A separate directory for the input (22) and for the output (23) should also be created. The directory structure should correspond to what you have declared in 4 and 5. The output directory will be populated by files produced during a successful run. The source code should be pretty much machine independent, except for the names of the auxiliary files which are called in the code.
+Search for the string "*** THE FILE NAME IS LOCATION DEPENDENT ***" and modify accordingly. If you extract the code and all the files from the gzipped tar file, you will obtain the same filenames and folder structure as at STScI, and little renaming should be required.
+
+
+The input
+Once all the files are in place and the declarations are complete, the input parameters need to be specified. If this is your first attempt, we suggest to leave the parameters as they are. They produce reasonable results and should give you a first impression of what is in store. Once you have gained more experience and have become more adventurous, you can modify the parameters to suit your needs. These are the parameters to play with:
+
+MODEL DESIGNATION:                                           [NAME]
+standard  -- any identifier you want to assign to the model. You will find it
+in the header of each output file.
+CONTINUOUS STAR FORMATION (>0) OR FIXED MASS (<=0):          [ISF]
+-1  -- if this is a negative integer, star formation is instantaneous,
+       otherwise it is continuous.
+TOTAL STELLAR MASS [106 SOLAR MASSES] IF 'FIXED MASS' IS CHOSEN: [TOMA]
+1.   -- this is the total stellar mass (spread out between the upper and lower
+        cut-off mases). It is only used if an instantaneous burst is specified.
+SFR [SOLAR MASSES PER YEAR] IF 'CONT. SF' IS CHOSEN:         [SFR]
+1.   -- the star formation rate (only used for a continuous rate). The total
+        accumulated mass is spread out between the upper and lower cut-off
+        masses.
+NUMBER OF INTERVALS FOR THE IMF (KROUPA=2):                  [NINTERV]
+2    -- intervals of the multi-power-law IMF. If two intervals are specified,
+        the program expects two IMF exponents and three IMF boundaries in the
+        next two input fields. Up to ten such intervals may be specified.
+IMF EXPONENT(S) (KROUPA=1.3,2.3):                            [XPONENT]
+1.3,2.3 -- one  more IMF exponents for a power-law can be specified. The
+           exponents refer to the individual power-law intervals, ordered
+           by increasing mass.
+MASS BOUNDARIES FOR IMF (KROUPA=0.1,0.5,100) [SOLAR MASSES]: [XMASLIM]
+0.1,0.5,100. -- the boundaries of the IMF intervals corresponding to the
+                specified exponents.
+SUPERNOVA CUT-OFF MASS [SOLAR MASSES]:                       [SNCUT]
+8.0 -- stars with ZAMS masses of 8 M and higher form supernovae. This is the
+       suggested standard value but can be modified if desired.
+BLACK HOLE CUT-OFF MASS [SOLAR MASSES]:                      [BHCUT]
+120. -- stars with ZAMS masses of 120 M and lower form supernovae. An
+        alternative scenario would be to let stars above a certain threshold
+        form a black hole. For instance, BHCUT=40. results in SNe only from the
+        mass range 40 to 8 M.
+METALLICITY + TRACKS:                                        [IZ]
+GENEVA STD: 11=0.001;  12=0.004; 13=0.008; 14=0.020; 15=0.040
+GENEVA HIGH:21=0.001;  22=0.004; 23=0.008; 24=0.020; 25=0.040
+PADOVA STD: 31=0.0004; 32=0.004; 33=0.008; 34=0.020; 35=0.050
+PADOVA AGB: 41=0.0004; 42=0.004; 43=0.008; 44=0.020; 45=0.050
+GENEVA V00: 51=0.001;  52=0.002; 53=0.008; 54=0.014; 55=0.040
+GENEVA v40: 61=0.001;  62=0.002; 63=0.008; 64=0.014; 65=0.040
+
+54 -- this integer indicates the evolutionary tracks to be used. The
+      choices are 11-15, 21-25, 31-35, 41-45, 51-55, and 61-65 where the
+      numbers indicate the metallicity of the four sets of tracks that
+      are available. Example: "54" selects solar metallicity from the latest
+      Geneva tracks with zero rotation. Note: only 52, 54, 62, 64 for the 2012,
+      2013 tracks are currently available. If a different track is chosen, it
+      will be reset to the closest metallicity.
+WIND MODEL (0: EVOLUTION; 1: EMP.; 2: THEOR.; 3: ELSON):        [IWIND]
+0 -- this selects the wind model to be used for the calculation of the
+     wind power. The four models are discussed in ApJ, 401, 596 (1992). "0"
+     is the suggested default parameter.
+INITIAL TIME [1.E6 YEARS]:                                   [TIME1]
+0.01 -- the epoch of the onset of the star formation. In almost all cases you
+        want this to be close to 0. It should not be exactly 0 for numerical
+        reasons. 0.01 (i.e. 10e4 yr) is a good number.
+TIME SCALE: LINEAR (=0) OR LOGARITHMIC (=1)                  [JTIME]
+0 --  a switch to select linear or logarithmic time intervals.
+TIME STEP [1.e6 YEARS] (ONLY USED IF JTIME=0):               [TBIV]
+0.1 --  this is the timestep used for the calculations. It is a very important
+        parameter. On the one hand, the computing time scales with STEP, so
+        you want to avoid too high resolution, but on the other, short
+        evolutionary phases can be missed. 0.1 (i.e. 10e5 yr) is a good
+        value if you use full isochrone synthesis. If full isochrone
+        synthesis is not used, 0.1 or large is suggested only for tests
+        --- be aware that WR or RSG numbers are no longer properly calculated
+        for a STEP of 0.1 unless full ischrone synthesis is selected!
+NUMBER OF STEPS        (ONLY USED IF JTIME=1):               [ITBIV]
+1000 -- if a logarithmic scaling is selected, the time step size varies with
+        time and is no longer specified via the TIME STEP field. In this case,
+        we enter the total number of time steps, which will then be distributed
+        logarithmically between the first and the last time point. As before,
+        users should beware of too small steps during short-lived evolutionary
+        phases.
+LAST GRID POINT [1.e6 YEARS]:                                [TMAX]
+100. -- the oldest age of the model.
+SMALL (=0) OR LARGE (=1) MASS GRID;
+ISOCHRONE ON  LARGE GRID (=2) OR FULL ISOCHRONE (=3):        [JMG]
+3 -- these are four options for the interpolation in mass. They are explained
+     in the code. Shortly: 0 -- evolutionary synthesis with a mass
+     resolution of 5 M (only recommended for tests); 1 -- same as 0, but with
+     a resolution of 1 M. This method was used in Leitherer & Heckman (1995);
+     2 -- isochrone synthesis with a fixed mass resolution of 1 M;
+     3 -- isochrone synthesis with a variable mass grid. This is the recommended
+     method. In particular, FULL ISOCHRONE must be used if masses below 1 solar
+     masses from the Padova tracks are to be included in the modeling.
+LMIN, LMAX (ALL=0):                                          [LMIN,LMAX]
+0 -- LMIN and LMAX are the indices of the evolutionary tracks, sorted by mass.
+     Normally you do not want to mess with the variable and leave it at 0.
+     However, if you want to track down some peculiarity of the output, you
+     may want to compute the parameters for only one track. For instance,
+     specifying 21,21 indicates that only a 100 M star should be used, and
+     everything else is suppressed. The cross-ID's between index and mass
+     are at the bottom of the input file. The example here refers to JMG=1 or
+     2. For JMG=0, you would have chosen 5,5. This does not apply to JMG=3
+     since the mass grid is variable. If JMG=3, LMIN and LMAX are not used.
+TIME STEP FOR PRINTING OUT THE SYNTHETIC SPECTRA [1.e6YR]:   [TDEL]
+1.0 -- the file containing the output spectrum can be pretty big. This
+       parameter controls the time step to print out the spectrum. This is
+       independent of the time resolution -- only the print out is affected!
+       1 Myr is usually a good value but if you compute the starburst up to
+       100 Myr, you may prefer TDEL=5 Myr unless you have many Mb of disk
+       space.
+ATMOSPHERE FOR THE LOW-RES SPECTRUM: 1=PLA, 2=LEJ, 3=LEJ+SCH, 4=LEJ+HIL, 5=PAU+HIL [IATMOS]
+5 -- this is the choice of the model atmosphere. 1 is a bare-bone version with
+     black bodies, good only for tests. 2 uses the Kurucz models as compiled
+     by Lejeune for all stars. 3 uses Lejeune for stars with plane-parallel
+     atmospheres and Schmutz for stars with strong winds. 4 uses Lejeune,
+     but replaces the Schmutz by the Hillier atmospheres. 5 is like 4, except
+     for the O atmospheres, for which we use the Pauldrach models. 5 is the
+     recommended value.
+METALLICITY OF THE OPTICAL HIGH RESOLUTION MODELS                    [ILIB]
+(1=0.001, 2= 0.008, 3=0.020, 4=0.040):
+3 -- a switch to choose the metallicity of the optical high-res spectra. 4
+     choices are offered, and the user can decide how to match them to the
+     evolution models.
+LIBRARY FOR THE EMPIRICAL UV LINE SPECTRUM: (1=SOLAR, 2=LMC/SMC)       [ILINE]
+1 -- a switch for the choice of the UV spectral library. This switch applies
+     to both the FUSE and the HST/IUE libraries. It is independent of the
+     metallicity of the tracks/atmospheres. Normally one would use
+     ILINE=1 with IZ=54 and ILINE=2 with IZ=52.
+RSG FEATURE: MICROTURB. VEL (1-6), SOL/NON-SOL ABUND (0,1)   [IVT,IRSG]
+3,0 -- atmospheric parameters used for the spectral features in the near-IR.
+       Detailed explanations are in the sp-feature subroutine. Defaults are
+       3,0, i.e. microturbulent velocities of 3 km/sec and solar abundance
+       ratios for alpha-element/Fe.
+OUTPUT FILES (NO<0, YES>=0)                                  [IO1,...]
++1,+1,-1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1,+1
+	These are options to generate various outputs. We recommend to use
+        the default setting for the flags, at least until you become more
+        familiar with the code. Some of the subroutines are interrelated. If
+        you choose such a subroutine but not the other, required one, a warning
+        will be issued. The 15 output flags are explained in the next section.
+        They are discussed in the order as they appear above. For instance,
+        "(7)" refers to the 7th of the 15 flags.
+The output
+
+Computation of the number of ionizing photons. (7) must be set to "yes" since the spectrum below 912 A is needed. Output is the number of ionizing photons in the HI, HeI, and HeII continuum, their fractions relative to the total luminosity, and the total luminosity.
+Calculation of the supernova rate and the mechanical luminosities (winds and supernovae). It requires (4) to obtain the stellar wind luminosities. Otherwise it is independent of other subroutines.
+HRD with a few evolutionary tracks. This is mostly useful for test purposes. This part is independent of all other subroutines and can be turned on/off without doing any harm. The HRD cannot be produced in Isochrone Synthesis mode, therefore it is turned off by default.
+Mechanical luminosity and related quantities due to winds. (No supernovae!) It does not depend on any other subroutine since no information on the energy distribution is needed.
+Two output files containing the stellar spectral types during each time step and the relative numbers of WR stars. The spectral types follow the scheme by Schmidt-Kaler and Martins et al. (2005) for O stars, oversampled by a factor of 2. For instance, there are 18 entries for spectral type B. They are the number of stars for types B0, B0.5, B1,...B9.5 (total of 18). Schmidt-Kaler's table has B0, B1,....B9 (total of 9). The spectral types are printed out only every TDEL. Otherwise it is too bulky.
+The mass in individual elements released via stellar winds and supernovae. No other subroutines are needed. The supernova yields for type II supernovae are taken into account.
+The continuous spectrum of the stellar population for each time step. The columns are time, wavelength, stellar+nebular, stellar only, and nebular only fluxes. (1) is needed in order to calculate the nebular continuum.
+The ultraviolet line spectrum at 0.75 A resolution from 1200 to 1600 A (LMC/SMC library) or to 1800 A (Milky Way library). The subroutine needs (7) to compute the stellar continuum and (1) for the nebular continuum. If (1) is turned off, the nebular contribution can not be added (it is often small, though). The columns have time, wavelength, absolute luminosity, and rectified (continuum=1) luminosity.
+Calculation of colors and magnitudes. The subroutine needs (7) to compute the stellar continuum and (1) for the nebular continuum. If (1) is turned off, the nebular contribution can not be added and the computed colors are for stars only (this may sometimes be desirable). The filter system is defined in the code.
+Calculation of the strengths of H_alpha, H_beta, Pa_beta, and Br_gamma. For each line we give the continuum luminosity, the line luminosity, and the equivalent width (everything logarithmic). The subroutine needs (7) to compute the stellar continuum and (1) for the number of ionizing photons.
+Calculation of the strengths of various spectral features. First is the CO index as computed by Doyon et al. (1994, ApJ, 421, 101). (Please note that this calculation has no metallicity dependence. A later version of this routine will compute the CO index using the model atmospheres themselves and give metallicity-dependent results.) Next are two computations of the CaII IR triplet using the relations of Diaz et al. (1989, MNRAS, 239, 325). The relations from Diaz et al. have no temperature dependence; the first calculation has the feature present in stars of all temperatures; the second has the index set to zero strength for stars with T>7200K (spectral type A or earlier). Next come the 1.62 and 2.29 micron CO features, and the 1.59 micron Si feature, which were modelled for individual stars by Origlia et al. (1993, A&A, 280, 536.) The indices can be computed for solar [Si/Fe] and [C/Fe], or a model with enhanced [Si/Fe] and depleted [C/Fe] (as for young systems enriched primarily by Type II SNe), and for stellar atmospheric microturbulent velocities (MTVs) of 1-6 km/s. (Note that the changes to the abundance ratios and MTVs are self-contained in this routine and have no effect upon the other outputs, e.g., colors, of the code.) The last column of the output file has the stellar Lyman-alpha as described by Pena-Guerrero & Leitherer (2013).
+This subroutine is equivalent to (8), but it computes the spectral region between 1000 and 1180 A.
+Calculates fully theoretical spectra between 3000 and 7000 A at 0.3 A resolution. These spectra are independent of the calculation of the low-resolution spectra in output 7. The file structure is the same as in (8).
+Calculation of the most important WR emission lines using the line luminosities of Schaerer & Vacca (1998, ApJ, 497, 658). These are only those lines originating in WR winds --- not the nebular lines in the HII region. Quantities given are the line fluxes and the equivalent widths. The subroutine needs (7) to compute the stellar continuum and (1) for the nebular continuum. If (1) is turned off, the nebular contribution can not be added.
+Calculation of a high-resolution UV line spectrum from model atmospheres, as opposed to using an empirical library. The output format and units are the same as those under (13). The library is discussed by Leitherer et al. (2010).
